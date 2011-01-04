@@ -1,0 +1,13 @@
+{
+  "string": "test",
+  "int"   : 123,
+  "float" : 0.123,
+  "array" : [1, 2, 3],
+  "object": {
+    "string": "test",
+    "int"   : 123,
+    "float" : 0.123,
+    "array" : [1, 2, 3],
+    "object": {}
+  }
+}
