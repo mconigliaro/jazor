@@ -10,10 +10,6 @@ class TestExecute < Test::Unit::TestCase
     assert `./bin/jazor` == "{}\n"
   end
 
-  def test_bad_domain()
-    assert `./bin/jazor http://examplecom` =~ /^Error/
-  end
-
   def test_bad_json()
     assert `./bin/jazor http://example.com` =~ /^Error/
   end
@@ -23,14 +19,14 @@ class TestExecute < Test::Unit::TestCase
   end
 
   def test_with_source_and_slice()
-    assert eval(`./bin/jazor ./test/test.json object`).is_a?(Hash)
-    assert eval(`./bin/jazor ./test/test.json object.array`).is_a?(Array)
+    assert eval(`./bin/jazor ./test/test.json nested_object`).is_a?(Hash)
+    assert eval(`./bin/jazor ./test/test.json nested_object.array_of_values`).is_a?(Array)
     assert eval(`./bin/jazor ./test/test.json dontexist`).nil?
   end
 
   def test_with_source_and_tests()
-    assert `./bin/jazor ./test/test.json -t 'int==123'` =~ /(Passed)/
-    assert `./bin/jazor ./test/test.json -t 'int==1234'` =~ /(Failed)/
+    assert `./bin/jazor ./test/test.json -t 'value1==123'` =~ /(Passed)/
+    assert `./bin/jazor ./test/test.json -t 'value1==1234'` =~ /(Failed)/
   end
 
 end

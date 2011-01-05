@@ -1,3 +1,32 @@
 = Jazor
 
-Coming soon...
+Jazor is a simple command line JSON parsing tool.
+
+== Installation
+
+  gem install jazor
+
+=== General usage
+
+  jazor [options] [source] [slice]
+
+- The *source* option refers to a file, URL or string containing JSON data.
+- The *slice* option refers to the piece of JSON data you're interested in.
+
+=== Examples
+
+==== Reading the entire JSON object from a URL
+
+  jazor 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=jazor'
+
+==== Reading a JSON "slice" from a URL
+
+  jazor 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=jazor' responseData.results[0].title
+
+==== Testing the value of a JSON "slice"
+
+  jazor 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=jazor' -t 'responseData.results.is_a?(Array)'
+
+==== Known Issues
+
+- Some JSON object names may conflict with existing hash methods. This will be fixed.

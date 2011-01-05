@@ -1,14 +1,17 @@
+$:.push File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
+require 'jazor'
+
 Gem::Specification.new do |s|
-  s.name              = 'jazor'
-  s.version           = '0.0.1'
-  s.authors           = ["Michael T. Conigliaro"]
-  s.email             = ["mike [at] conigliaro [dot] org"]
-  s.homepage          = "http://github.com/mconigliaro/jazor"
-  s.rubyforge_project = 'jazor'
+  s.name              = Jazor::NAME
+  s.version           = Jazor::VERSION
+  s.authors           = [Jazor::AUTHOR]
+  s.email             = [Jazor::AUTHOR_EMAIL]
+  s.homepage          = Jazor::URL
+  s.rubyforge_project = Jazor::NAME
   s.summary           = 'Jazor is a simple command line JSON parsing tool'
   s.description       = 'Jazor is a simple command line JSON parsing tool'
 
   s.add_dependency('json')
 
-  s.files = ['COPYING.txt', 'README.rdoc'] + Dir['lib/*.rb'] + Dir['bin/*.rb']
+  s.files = ['COPYING.txt', 'Rakefile', 'README.rdoc'] + Dir['bin/*'] + Dir['lib/*.rb'] + Dir['test/*']
 end

@@ -7,5 +7,5 @@ task :test do
 end
 
 task :build do
-  system "gem build jazor.gemspec"
+  system "gem build *.gemspec"
 end

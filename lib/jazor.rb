@@ -6,71 +6,57 @@ require 'uri'
 
 module Jazor
 
-  class JObject
-
-    def initialize(hash={})
-      hash.each do |k,v|
-        k = k.gsub('.', '_')
-        if v.is_a?(Hash)
-          instance_variable_set("@#{k}", JObject.new(v))
-        else
-          instance_variable_set("@#{k}", v)
-        end
-      end
-    end
-
-    def to_hash()
-      hash = {}
-      instance_variables.each do |name|
-        hname = name.sub('@', '')
-        value = instance_variable_get(name)
-        if value.is_a?(JObject)
-          hash[hname] = value.to_hash()
-        else
-          hash[hname] = value
-        end
-      end
-      return hash
-    end
-
-    def method_missing(name, value=nil)
-      if name.to_s =~ /=$/
-        instance_variable_set("@#{name.chop}", value)
-      else
-        instance_variable_get("@#{name}")
-      end
-    end
-
-  end
+  NAME = 'jazor'
+  VERSION_INFO = ['0', '0', '1']
+  VERSION = VERSION_INFO.join('.')
+  AUTHOR = 'Michael T. Conigliaro'
+  AUTHOR_EMAIL = 'mike [at] conigliaro [dot] org'
+  URL = 'http://github.com/mconigliaro/jazor'
 
   class Jazor
 
-    attr_reader :data
+    attr_reader :json
 
     def initialize(source)
-      hash = nil
+      @json = nil
       if !source.nil?
         if source.is_a?(Hash)
-          hash = source
+          @json = source
         elsif source =~ URI::regexp
-          hash = JSON.parse(Net::HTTP.get(URI.parse(source)))
+          @json = JSON.parse(Net::HTTP.get(URI.parse(source)))
         elsif File.readable?(source)
-          hash = JSON.parse(IO.read(source))
+          @json = JSON.parse(IO.read(source))
         else
-          hash = JSON.parse(source)
+          @json = JSON.parse(source)
         end
       end
-      @data = JObject.new(hash)
     end
 
     def get_slice(slice=nil)
-      if !slice.nil?
-        @data.instance_eval(slice)
+      if slice.nil?
+        @json
+      elsif slice =~ /^json/
+        instance_eval(slice)
       else
-        @data
+        @json.instance_eval(slice)
       end
+    end
+
+    def method_missing(name)
+      get_slice(name.to_s)
     end
 
   end
 
+end
+
+class Hash
+  def method_missing(name, value=nil)
+    str_name = name.to_s
+    if str_name =~ /=$/
+      self[str_name] = value
+    else
+      self[str_name]
+    end
+  end
 end

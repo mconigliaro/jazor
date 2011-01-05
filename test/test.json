@@ -1,13 +1,32 @@
 {
-  "string": "test",
-  "int"   : 123,
-  "float" : 0.123,
-  "array" : [1, 2, 3],
-  "object": {
-    "string": "test",
-    "int"   : 123,
-    "float" : 0.123,
-    "array" : [1, 2, 3],
-    "object": {}
+  "value0": "test",
+  "value1": 123,
+  "value2": 0.123,
+  "array_of_values" : [1, 2, 3],
+  "array_of_arrays" : [
+    [1, 2, 3],
+    [1, 2, 3],
+    [1, 2, 3]
+  ],
+  "array_of_objects": [
+    {"object0":1},
+    {"object1":2},
+    {"object2":3}
+  ],
+  "nested_object": {
+    "value0": "test",
+    "value1": 123,
+    "value2": 0.123,
+    "array_of_values" : [1, 2, 3],
+    "array_of_arrays" : [
+      [1, 2, 3],
+      [1, 2, 3],
+      [1, 2, 3]
+    ],
+    "array_of_objects": [
+      {"object0":0},
+      {"object1":1},
+      {"object2":2}
+    ]
   }
 }
