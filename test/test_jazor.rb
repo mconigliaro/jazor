@@ -14,15 +14,15 @@ class TestExecute < Test::Unit::TestCase
     @jazor = Jazor::Jazor.new(@init_hash)
   end
 
-  def test_jazor_from_url()
+  def test_init_from_url()
     Jazor::Jazor.new(@init_url)
   end
 
-  def test_jazor_from_file()
+  def test_init_from_file()
     Jazor::Jazor.new(@init_file)
   end
 
-  def test_jazor_from_string()
+  def test_init_from_string()
     Jazor::Jazor.new(@init_string)
   end
 
@@ -43,32 +43,41 @@ class TestExecute < Test::Unit::TestCase
   def test_array_of_values
     assert @jazor.json.array_of_values.is_a?(Array)
     assert @jazor.json.array_of_values == @init_hash['array_of_values']
+    (0...@jazor.json.array_of_values.length).each do |i|
+      assert @jazor.json.array_of_values[i].is_a?(Integer)
+      assert @jazor.json.array_of_values[i] == @init_hash["array_of_values"][i]
+    end
   end
 
   def test_array_of_arrays
     assert @jazor.json.array_of_arrays.is_a?(Array)
-    assert @jazor.json.array_of_arrays[0].is_a?(Array)
-    assert @jazor.json.array_of_arrays[0] == @init_hash['array_of_arrays'][0]
-    assert @jazor.json.array_of_arrays[0][0].is_a?(Numeric)
-    assert @jazor.json.array_of_arrays[0][0] == @init_hash['array_of_arrays'][0][0]
+    (0...@jazor.json.array_of_arrays.length).each do |i|
+      assert @jazor.json.array_of_arrays[i].is_a?(Array)
+      assert @jazor.json.array_of_arrays[i] == @init_hash['array_of_arrays'][i]
+      (0...@jazor.json.array_of_arrays[i].length).each do |j|
+        assert @jazor.json.array_of_arrays[i][j].is_a?(Integer)
+        assert @jazor.json.array_of_arrays[i][j] == @init_hash['array_of_arrays'][i][j]
+      end
+    end
   end
 
   def test_array_of_objects
     assert @jazor.json.array_of_objects.is_a?(Array)
-    assert @jazor.json.array_of_objects[0].is_a?(Hash)
-    assert @jazor.json.array_of_objects[0] == @init_hash['array_of_objects'][0]
-
-    (0..2).each do |i|
-      assert @jazor.json.array_of_objects[i].send("object#{i}").is_a?(Numeric)
+    (0...@jazor.json.array_of_objects.length).each do |i|
+      assert @jazor.json.array_of_objects[i].is_a?(Hash)
+      assert @jazor.json.array_of_objects[i] == @init_hash['array_of_objects'][i]
+      assert @jazor.json.array_of_objects[i].send("object#{i}").is_a?(Integer)
       assert @jazor.json.array_of_objects[i].send("object#{i}") == @init_hash['array_of_objects'][i]["object#{i}"]
     end
   end
 
+  def test_get_nil_slice_returns_complete_object()
+    assert @jazor.get_slice.is_a?(Hash)
+    assert @jazor.get_slice == @init_hash
+  end
+
   def test_get_slice()
-    jazor = Jazor::Jazor.new(@init_hash)
-    assert jazor.get_slice.is_a?(Hash)
-    assert jazor.get_slice == @init_hash
-    assert jazor.get_slice('nested_object') == @init_hash['nested_object']
+    assert @jazor.get_slice('nested_object') == @init_hash['nested_object']
   end
 
 end
