@@ -9,3 +9,7 @@ end
 task :build do
   system "gem build *.gemspec"
 end
+
+task :push do
+  system "gem push *.gem"
+end
