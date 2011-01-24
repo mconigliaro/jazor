@@ -26,7 +26,10 @@ module Jazor
     jazor = Jazor.new(ARGV[0].nil? ? {} : ARGV[0])
     slices = ARGV.length > 1 ? ARGV[1..ARGV.length] : [nil]
     slices.each do |slice|
-      pp jazor.get_slice(slice)
+      obj = jazor.get_slice(slice)
+      if !obj.nil?
+        puts JSON.pretty_generate(obj)
+      end
     end
 
   rescue StandardError => e

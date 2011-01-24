@@ -7,7 +7,7 @@ require 'jazor'
 class TestExecute < Test::Unit::TestCase
 
   def test_without_paramaters()
-    assert `./bin/jazor` == "{}\n"
+    assert JSON.parse(`./bin/jazor`) == {}
   end
 
   def test_bad_json()
@@ -15,13 +15,13 @@ class TestExecute < Test::Unit::TestCase
   end
 
   def test_with_source()
-    assert eval(`./bin/jazor ./test/test.json`).is_a?(Hash)
+    assert JSON.parse(`./bin/jazor ./test/test.json`).is_a?(Hash)
   end
 
   def test_with_source_and_slice()
-    assert eval(`./bin/jazor ./test/test.json nested_object`).is_a?(Hash)
-    assert eval(`./bin/jazor ./test/test.json nested_object.array_of_values`).is_a?(Array)
-    assert eval(`./bin/jazor ./test/test.json dontexist`).nil?
+    assert JSON.parse(`./bin/jazor ./test/test.json nested_object`).is_a?(Hash)
+    assert JSON.parse(`./bin/jazor ./test/test.json nested_object.array_of_values`).is_a?(Array)
+    assert `./bin/jazor ./test/test.json dontexist` == ''
   end
 
   def test_with_source_and_tests()

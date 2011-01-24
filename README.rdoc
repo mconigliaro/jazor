@@ -11,7 +11,10 @@ Jazor is a simple command line JSON parsing tool.
   jazor [options] [source] [slice]
 
 - The *source* option refers to a file, URL or string containing JSON data.
-- The *slice* option refers to the piece of JSON data you're interested in.
+- The *slice* option refers to the piece of JSON data you're interested in. This
+  is usually just the name of an attribute, but you can also access it like a
+  hash (e.g. json['<attribute>']), or if the JSON object is an array, like an
+  array (e.g. json[0], etc.).
 
 === Examples
 
@@ -26,7 +29,3 @@ Jazor is a simple command line JSON parsing tool.
 ==== Testing the value of a JSON "slice"
 
   jazor 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=jazor' -t 'responseData.results.is_a?(Array)'
-
-==== Known Issues
-
-- Some JSON object names may conflict with existing hash methods. This will be fixed.
