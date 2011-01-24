@@ -53,10 +53,10 @@ end
 class Hash
   def method_missing(name, value=nil)
     str_name = name.to_s
-    if str_name =~ /=$/
-      self[str_name] = value
-    else
+    if self.has_key?(str_name)
       self[str_name]
+    else
+      nil
     end
   end
 end

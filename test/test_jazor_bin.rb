@@ -19,9 +19,10 @@ class TestExecute < Test::Unit::TestCase
   end
 
   def test_with_source_and_slice()
+    assert eval(`./bin/jazor ./test/test.json value1`).is_a?(Numeric)
     assert JSON.parse(`./bin/jazor ./test/test.json nested_object`).is_a?(Hash)
     assert JSON.parse(`./bin/jazor ./test/test.json nested_object.array_of_values`).is_a?(Array)
-    assert `./bin/jazor ./test/test.json dontexist` == ''
+    assert eval(`./bin/jazor ./test/test.json dontexist`).nil?
   end
 
   def test_with_source_and_tests()
