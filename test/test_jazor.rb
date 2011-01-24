@@ -6,24 +6,14 @@ require 'jazor'
 
 class TestExecute < Test::Unit::TestCase
 
-  def setup()
-    @init_url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=jazor'
-    @init_file = File.expand_path(File.join(File.dirname(__FILE__), 'test.json'))
-    @init_string = IO.read(@init_file)
-    @init_hash = JSON.parse(@init_string)
-    @jazor = Jazor::Jazor.new(@init_hash)
+  def setup
+    @init_json = IO.read(File.expand_path(File.join(File.dirname(__FILE__), 'test.json')))
+    @init_hash = JSON.parse(@init_json)
+    @jazor = Jazor::Jazor.new(@init_json)
   end
 
-  def test_init_from_url()
-    Jazor::Jazor.new(@init_url)
-  end
-
-  def test_init_from_file()
-    Jazor::Jazor.new(@init_file)
-  end
-
-  def test_init_from_string()
-    Jazor::Jazor.new(@init_string)
+  def test_init
+    Jazor::Jazor.new(@init_json)
   end
 
   def test_root_object

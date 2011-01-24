@@ -1,7 +1,8 @@
 require 'json'
-require 'net/http'
+require 'logger'
 require 'pp'
-require 'uri'
+
+require 'rest_client'
 
 
 module Jazor
@@ -13,23 +14,15 @@ module Jazor
   AUTHOR_EMAIL = 'mike [at] conigliaro [dot] org'
   URL = 'http://github.com/mconigliaro/jazor'
 
+  LOG = Logger.new(STDOUT)
+  LOG.level = Logger::INFO
+
   class Jazor
 
     attr_reader :json
 
-    def initialize(source)
-      @json = nil
-      if !source.nil?
-        if source.is_a?(Hash)
-          @json = source
-        elsif source =~ URI::regexp
-          @json = JSON.parse(Net::HTTP.get(URI.parse(source)))
-        elsif File.readable?(source)
-          @json = JSON.parse(IO.read(source))
-        else
-          @json = JSON.parse(source)
-        end
-      end
+    def initialize(source=nil)
+      @json = source.nil? ? nil : JSON.parse(source)
     end
 
     def get_slice(slice=nil)

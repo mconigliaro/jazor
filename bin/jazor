@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'optparse'
+require 'fcntl'
 
 $:.push File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'jazor'
@@ -9,7 +10,10 @@ require 'jazor'
 module Jazor
 
   options = {
-    :tests => []
+    :tests        => [],
+    :rest_data    => '',
+    :rest_headers => {},
+    :rest_request => 'GET'
   }
 
   OptionParser.new do |opts|
@@ -17,34 +21,67 @@ module Jazor
     opts.banner = "Usage: #{$0} [options] [source] [slice]\n" \
     + "Example: #{$0} http://example.com/example.json a.b.c\n\n"
 
+    opts.on('-d', '--data DATA', 'Data sent with REST request') do |opt|
+      options[:rest_data] = opt
+    end
+
+    opts.on('-H', '--header HEADER', 'Header sent with REST request') do |opt|
+      key, value = opt.split(':')
+      options[:rest_headers][key.strip] = value.strip
+    end
+
     opts.on('-t', '--test EXPRESSION', 'Test expression') do |opt|
       options[:tests] << opt
+    end
+
+    opts.on('-v', '--verbose', 'Turn on verbose logging') do |opt|
+      LOG.level = Logger::DEBUG
+    end
+
+    opts.on('-X', '--request REQUEST', 'REST request method (default: %s)' % options[:rest_request]) do |opt|
+      options[:rest_request] = opt
     end
   end.parse!
 
   begin
-    jazor = Jazor.new(ARGV[0].nil? ? {} : ARGV[0])
-    slices = ARGV.length > 1 ? ARGV[1..ARGV.length] : [nil]
+
+    jazor = if STDIN.fcntl(Fcntl::F_GETFL, 0) == 0
+      json = STDIN.read
+      LOG.debug('Reading JSON from STDIN')
+      Jazor.new(json)
+    elsif !ARGV[0].nil?
+      if ARGV[0] =~ URI::regexp
+        LOG.debug('Reading JSON from URI: %s' % ARGV[0])
+        Jazor.new(RestClient.send(options[:rest_request], ARGV.shift, options[:rest_headers], options[:rest_data]).body)
+      elsif File.readable?(ARGV[0])
+        LOG.debug('Reading JSON from file: %s' % ARGV[0])
+        Jazor.new(IO.read(ARGV.shift))
+      else
+        LOG.debug('Reading JSON from ARGV: %s' % ARGV[0])
+        Jazor.new(ARGV.shift)
+      end
+    else
+      Jazor.new(nil)
+    end
+
+    slices = ARGV.length > 0 ? ARGV[0..ARGV.length] : [nil]
     slices.each do |slice|
       obj = jazor.get_slice(slice)
-      if [Hash, Array].include?(obj.class)
-        puts JSON.pretty_generate(obj)
-      else
-        puts obj
-      end
+      puts [Hash, Array].include?(obj.class) ? JSON.pretty_generate(obj) : obj
     end
 
   rescue StandardError => e
-    puts "Error: #{e}"
+    #puts e
+    #puts e.backtrace
+    LOG.error(e.message)
     exit(1)
   end
 
   options[:tests].each do |test|
-    print "Test: %s" % test
     if jazor.instance_eval(test)
-      puts " (Passed)"
+      LOG.info("Test passed: %s" % test)
     else
-      puts " (Failed)"
+      LOG.error("Test failed: %s" % test)
       exit(1)
     end
   end
