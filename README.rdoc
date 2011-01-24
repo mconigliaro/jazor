@@ -12,7 +12,7 @@ Jazor is a simple command line JSON parsing tool.
 
 - The *source* option refers to a file, URL or string containing JSON data.
 - The *slice* option refers to the piece of JSON data you're interested in. This
-  is usually just the name of the attribute, but you can also access it like a
+  is usually just the name of an attribute, but you can also access it like a
   hash (e.g. json['<attribute>']), or if the JSON object is an array, like an
   array (e.g. json[0], etc.).
 
