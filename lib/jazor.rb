@@ -8,7 +8,7 @@ require 'rest_client'
 module Jazor
 
   NAME = 'jazor'
-  VERSION_INFO = ['0', '0', '1']
+  VERSION_INFO = ['0', '0', '2']
   VERSION = VERSION_INFO.join('.')
   AUTHOR = 'Michael T. Conigliaro'
   AUTHOR_EMAIL = 'mike [at] conigliaro [dot] org'

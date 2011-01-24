@@ -14,4 +14,5 @@ Gem::Specification.new do |s|
   s.add_dependency('json')
 
   s.files = ['COPYING.txt', 'Rakefile', 'README.rdoc'] + Dir['bin/*'] + Dir['lib/*.rb'] + Dir['test/*']
+  s.executables = ['jazor']
 end
