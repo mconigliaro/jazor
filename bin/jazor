@@ -51,6 +51,11 @@ module Jazor
       puts "%s %s\n%s <%s>\n%s" % [opts.program_name, opts.version, AUTHOR, AUTHOR_EMAIL, URL]
       exit
     end
+
+    if ARGV.length == 0 && STDIN.fcntl(Fcntl::F_GETFL, 0) != 0
+      puts opts.help
+      exit(1)
+    end
   end.parse!
 
   begin

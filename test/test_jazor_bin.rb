@@ -14,7 +14,7 @@ class TestExecute < Test::Unit::TestCase
   end
 
   def test_without_paramaters
-    assert eval(`#{@jazor_bin}`).nil?
+    assert `#{@jazor_bin}` =~ /Usage:/
   end
 
   def test_json_from_stdin
