@@ -30,3 +30,7 @@ Jazor is a simple command line JSON parsing tool.
 ==== Testing the value of a JSON "slice"
 
   jazor 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=jazor' -t 'responseData.results.is_a?(Array)'
+
+=== Help
+
+  jazor --help

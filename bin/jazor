@@ -41,6 +41,16 @@ module Jazor
     opts.on('-X', '--request REQUEST', 'REST request method (default: %s)' % options[:rest_request]) do |opt|
       options[:rest_request] = opt
     end
+
+    opts.on_tail('-h', '--help', 'Show this message') do
+      puts opts.help
+      exit
+    end
+
+    opts.on_tail('--version', 'Show version') do
+      puts "%s %s\n%s <%s>\n%s" % [opts.program_name, opts.version, AUTHOR, AUTHOR_EMAIL, URL]
+      exit
+    end
   end.parse!
 
   begin
