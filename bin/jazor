@@ -9,56 +9,57 @@ require 'jazor'
 
 module Jazor
 
-  options = {
-    :tests        => [],
-    :rest_data    => '',
-    :rest_headers => {},
-    :rest_request => 'GET'
-  }
-
-  OptionParser.new do |opts|
-    opts.version = VERSION
-    opts.banner = "Usage: #{$0} [options] [source] [slice]\n" \
-    + "Example: #{$0} http://example.com/example.json a.b.c\n\n"
-
-    opts.on('-d', '--data DATA', 'Data sent with REST request') do |opt|
-      options[:rest_data] = opt
-    end
-
-    opts.on('-H', '--header HEADER', 'Header sent with REST request') do |opt|
-      key, value = opt.split(':')
-      options[:rest_headers][key.strip] = value.strip
-    end
-
-    opts.on('-t', '--test EXPRESSION', 'Test expression') do |opt|
-      options[:tests] << opt
-    end
-
-    opts.on('-v', '--verbose', 'Turn on verbose logging') do |opt|
-      LOG.level = Logger::DEBUG
-    end
-
-    opts.on('-X', '--request REQUEST', 'REST request method (default: %s)' % options[:rest_request]) do |opt|
-      options[:rest_request] = opt
-    end
-
-    opts.on_tail('-h', '--help', 'Show this message') do
-      puts opts.help
-      exit
-    end
-
-    opts.on_tail('--version', 'Show version') do
-      puts "%s %s\n%s <%s>\n%s" % [opts.program_name, opts.version, AUTHOR, AUTHOR_EMAIL, URL]
-      exit
-    end
-
-    if ARGV.length == 0 && STDIN.fcntl(Fcntl::F_GETFL, 0) != 0
-      puts opts.help
-      exit(1)
-    end
-  end.parse!
-
   begin
+
+    options = {
+      :tests        => [],
+      :rest_data    => {},
+      :rest_headers => {},
+      :rest_request => 'GET'
+    }
+
+    OptionParser.new do |opts|
+      opts.version = VERSION
+      opts.banner = "Usage: #{$0} [options] [source] [slice]\n" \
+      + "Example: #{$0} http://example.com/example.json a.b.c\n\n"
+
+      opts.on('-d', '--data DATA', 'Data sent with REST request (e.g. <name>=<value>)') do |opt|
+        key, value = opt.split('=')
+        options[:rest_data][key] = value
+      end
+
+      opts.on('-H', '--header HEADER', 'Header sent with REST request (e.g. <name>:<value>)') do |opt|
+        key, value = opt.split(':')
+        options[:rest_headers][key.strip] = value.strip
+      end
+
+      opts.on('-t', '--test EXPRESSION', 'Test expression (e.g. "a.b.c == 123")') do |opt|
+        options[:tests] << opt
+      end
+
+      opts.on('-v', '--verbose', 'Turn on verbose logging') do |opt|
+        LOG.level = Logger::DEBUG
+      end
+
+      opts.on('-X', '--request REQUEST', 'REST request method (default: %s)' % options[:rest_request]) do |opt|
+        options[:rest_request] = opt
+      end
+
+      opts.on_tail('-h', '--help', 'Show this message') do
+        puts opts.help
+        exit
+      end
+
+      opts.on_tail('--version', 'Show version') do
+        puts "%s %s\n%s <%s>\n%s" % [opts.program_name, opts.version, AUTHOR, AUTHOR_EMAIL, URL]
+        exit
+      end
+
+      if ARGV.length == 0 && STDIN.fcntl(Fcntl::F_GETFL, 0) != 0
+        puts opts.help
+        exit(1)
+      end
+    end.parse!
 
     jazor = if STDIN.fcntl(Fcntl::F_GETFL, 0) == 0
       json = STDIN.read
@@ -85,20 +86,19 @@ module Jazor
       puts [Hash, Array].include?(obj.class) ? JSON.pretty_generate(obj) : obj
     end
 
-  rescue StandardError => e
-    #puts e
-    #puts e.backtrace
-    LOG.error(e.message)
-    exit(1)
-  end
-
-  options[:tests].each do |test|
-    if jazor.instance_eval(test)
-      LOG.info("Test passed: %s" % test)
-    else
-      LOG.error("Test failed: %s" % test)
-      exit(1)
+    options[:tests].each do |test|
+      if jazor.instance_eval(test)
+        LOG.info("Test passed: %s" % test)
+      else
+        LOG.error("Test failed: %s" % test)
+        exit(1)
+      end
     end
+
+  rescue StandardError => e
+    LOG.error(e.message)
+    puts e.backtrace if LOG.level == Logger::DEBUG
+    exit(1)
   end
 
 end
