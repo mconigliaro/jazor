@@ -8,7 +8,7 @@ Jazor (rhymes with "razor") is a simple command line JSON parsing tool.
 
 == Usage
 
-  jazor [options] [source] [expression(s)]
+  jazor [options] [source] [expression ...]
 
 === Options
 
@@ -21,7 +21,7 @@ Since attempts to implement a full-featured HTTP client within Jazor would have
 been futile, Jazor also accepts input from STDIN. This means if you ever need
 to use an advanced HTTP option that Jazor doesn't implement, you can always use
 a *real* HTTP client (e.g. {cURL}[http://curl.haxx.se/]) and simply pipe the
-output to Jazor (see examples).
+output to Jazor.
 
 === Expressions
 

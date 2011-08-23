@@ -16,7 +16,7 @@ options = {
 
 OptionParser.new do |opts|
   opts.version = Jazor::VERSION
-  opts.banner = "Usage: #{$0} [options] [source] [expression(s)]\n\n"
+  opts.banner = "Usage: #{$0} [options] [source] [expression ...]\n\n"
 
   opts.on('-d', '--data NAME=VALUE', 'Data sent with REST request') do |opt|
     key, value = opt.split('=')
