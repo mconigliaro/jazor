@@ -2,7 +2,7 @@ task :default => [:test]
 
 task :test do
   Dir[File.expand_path(File.join(File.dirname(__FILE__), 'test', 'test_*'))].each do |test|
-    system "ruby #{test}"
+    system "ruby -I #{File.expand_path(File.join(File.dirname(__FILE__), 'lib'))} #{test}"
   end
 end
 

@@ -1,36 +1,68 @@
 = Jazor
 
-Jazor is a simple command line JSON parsing tool.
+Jazor (rhymes with "razor") is a simple command line JSON parsing tool.
 
 == Installation
 
   gem install jazor
 
-=== General usage
+== Usage
 
-  jazor [options] [source] [slice]
+  jazor [options] [source] [expression(s)]
 
-- The *source* option refers to a file, URL or string containing JSON data.
-  Jazor also accepts input from STDIN.
-- The *slice* option refers to the piece of JSON data you're interested in. This
-  is usually just the name of an attribute, but you can also access it like a
-  hash (e.g. json['<attribute>']), or if the JSON object is an array, like an
-  array (e.g. json[0], etc.).
+=== Options
 
-=== Examples
+See the **--help** command line option.
 
-==== Reading the entire JSON object from a URL
+=== Sources
 
-  jazor 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=jazor'
+The *source* argument refers to a file, URL or string containing a JSON object.
+Since attempts to implement a full-featured HTTP client within Jazor would have
+been futile, Jazor also accepts input from STDIN. This means if you ever need
+to use an advanced HTTP option that Jazor doesn't implement, you can always use
+a *real* HTTP client like {cURL}[http://curl.haxx.se/] and simply pipe the
+output to Jazor (see examples).
 
-==== Reading a JSON "slice" from a URL
+=== Expressions
 
-  jazor 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=jazor' responseData.results[0].title
+The *expression(s)* argument is pure Ruby code that is simply eval'ed within
+the context of your JSON object. After Jazor parses your JSON input into native
+Ruby data types (Hash, Array, etc.), you can use expressions to slice and dice
+the data any way you want. The results will be "pretty printed" to STDOUT.
 
-==== Testing the value of a JSON "slice"
+Note that hash keys can be accessed via standard Ruby (e.g. **foo['bar']**,
+**foo.fetch('bar')**, etc.) or Javascript (e.g. **foo.bar**) syntax.
 
-  jazor 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=jazor' -t 'responseData.results.is_a?(Array)'
+=== Expression Testing
 
-=== Help
+Expression testing (--test) allows you to test the "truthiness" of your
+expression results. If any expression returns a "falsy" value, Jazor will exit
+with a non-zero return code. This could be helpful when using Jazor in shell
+scripts.
 
-  jazor --help
+== Examples
+
+  $ jazor http://github.com/api/v2/json/commits/list/mconigliaro/jazor/master commits.count
+  16
+
+  $ curl --silent http://github.com/api/v2/json/commits/list/mconigliaro/jazor/master | jazor commits.last.message
+  initial commit
+
+  $ jazor '{ "foo": "abc", "bar": [1, 2, 3] }' 'foo.split(//)'
+  ["a", "b", "c"]
+
+  $ jazor '{ "foo": "abc", "bar": [1, 2, 3] }' 'bar.inject { |memo,obj| memo + obj }'
+  6
+
+  $ jazor '[1, 2, 3, 4, 5]' 'select { |obj| obj.even? }'
+  [2, 4]
+
+  $ jazor '[1, 2, 3, 4, 5]' 'select { |obj| obj.odd? }'
+  [1, 3, 5]
+
+  $ jazor '["a", "b", "c"]' self.count
+  3
+
+== Author
+
+Michael T. Conigliaro <mike [at] conigliaro [dot] org>

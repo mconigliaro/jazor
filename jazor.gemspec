@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.email             = [Jazor::AUTHOR_EMAIL]
   s.homepage          = Jazor::URL
   s.rubyforge_project = Jazor::NAME
-  s.summary           = 'Jazor is a simple command line JSON parsing tool'
-  s.description       = 'Jazor is a simple command line JSON parsing tool'
+  s.summary           = Jazor::DESCRIPTION
+  s.description       = File.read(File.expand_path(File.join(File.dirname(__FILE__), 'README.rdoc')))
 
   s.add_dependency('json')
 

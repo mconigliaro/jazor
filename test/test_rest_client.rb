@@ -1,12 +1,10 @@
 require 'test/unit'
 
-$:.push File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'jazor'
-
-
 class TestExecute < Test::Unit::TestCase
 
   def test_get
+    require 'jazor'
+
     response = Jazor::RestClient.get('http://ajax.googleapis.com/ajax/services/search/web')
     assert response.code == '200'
     assert response.body =~ /"responseStatus": 400/
