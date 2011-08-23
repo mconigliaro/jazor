@@ -12,7 +12,7 @@ Jazor (rhymes with "razor") is a simple command line JSON parsing tool.
 
 === Options
 
-See the **--help** command line option.
+See the *--help* command line option.
 
 === Sources
 
@@ -30,12 +30,12 @@ the context of your JSON object. After Jazor parses your JSON input into native
 Ruby data types (Hash, Array, etc.), you can use expressions to slice and dice
 the data any way you want. The results will be "pretty printed" to STDOUT.
 
-Note that hash keys can be accessed via standard Ruby (e.g. **foo['bar']**,
-**foo.fetch('bar')**, etc.) or Javascript (e.g. **foo.bar**) syntax.
+Note that hash keys can be accessed via standard Ruby (e.g. foo['bar'],
+foo.fetch('bar'), etc.) or Javascript (e.g. foo.bar) syntax.
 
 === Expression Testing
 
-Expression testing (--test) allows you to test the "truthiness" of your
+Expression testing (*--test*) allows you to test the "truthiness" of your
 expression results. If any expression returns a "falsy" value, Jazor will exit
 with a non-zero return code. This could be helpful when using Jazor in shell
 scripts.
