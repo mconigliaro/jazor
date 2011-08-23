@@ -20,15 +20,15 @@ The *source* argument refers to a file, URL or string containing a JSON object.
 Since attempts to implement a full-featured HTTP client within Jazor would have
 been futile, Jazor also accepts input from STDIN. This means if you ever need
 to use an advanced HTTP option that Jazor doesn't implement, you can always use
-a *real* HTTP client like {cURL}[http://curl.haxx.se/] and simply pipe the
+a *real* HTTP client (e.g. {cURL}[http://curl.haxx.se/]) and simply pipe the
 output to Jazor (see examples).
 
 === Expressions
 
-The *expression(s)* argument is pure Ruby code that is simply eval'ed within
+Jazor accepts one or more Ruby *expressions* which are simply eval'ed within
 the context of your JSON object. After Jazor parses your JSON input into native
-Ruby data types (Hash, Array, etc.), you can use expressions to slice and dice
-the data any way you want. The results will be "pretty printed" to STDOUT.
+Ruby data types (Hash, Array, etc.), these expressions are used to slice and
+dice the data any way you want. The results will be "pretty printed" to STDOUT.
 
 Note that hash keys can be accessed via standard Ruby (e.g. foo['bar'],
 foo.fetch('bar'), etc.) or Javascript (e.g. foo.bar) syntax.
@@ -37,7 +37,7 @@ foo.fetch('bar'), etc.) or Javascript (e.g. foo.bar) syntax.
 
 Expression testing (*--test*) allows you to test the "truthiness" of your
 expression results. If any expression returns a "falsy" value, Jazor will exit
-with a non-zero return code. This could be helpful when using Jazor in shell
+with a non-zero return code. This is useful for calling Jazor from within shell
 scripts.
 
 == Examples
