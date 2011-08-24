@@ -13,11 +13,13 @@ module Jazor
   VERSION      = '0.1.0'
   AUTHOR       = 'Michael T. Conigliaro'
   AUTHOR_EMAIL = 'mike [at] conigliaro [dot] org'
-  DESCRIPTION  = 'Jazor is a simple command line JSON parsing tool'
+  DESCRIPTION  = 'Jazor (JSON + razor) is a simple command line JSON parsing tool.'
   URL          = 'http://github.com/mconigliaro/jazor'
 
   LOG = Logger.new(STDOUT)
   LOG.level = Logger::INFO
+
+  HAS_ORDERED_HASH = (RUBY_VERSION.split('.').map(&:to_i) <=> [1, 9, 1]) >= 0
 
   def self.parse(input=nil)
     # FIXME: https://github.com/flori/json/issues/16

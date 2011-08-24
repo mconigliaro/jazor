@@ -40,8 +40,10 @@ OptionParser.new do |opts|
     options[:rest_request] = opt
   end
 
-  opts.on('-s', '--sort', 'If the output is an array sort the indexs, if it\'s an object then sort by the keys') do
-    options[:sort] = true
+  if Jazor::HAS_ORDERED_HASH
+    opts.on('-s', '--sort', "Sort output") do
+      options[:sort] = true
+    end
   end
 
   opts.on_tail('-h', '--help', 'Show this message') do
@@ -79,11 +81,10 @@ begin
   end
 
   if options[:sort] && obj.respond_to?(:sort)
-    if obj.respond_to?(:keys) && obj.respond_to?(:values)
-      # Doesn't need to transform to string because each element in json must be a string
-      obj = Hash[obj.sort]
+    obj = if obj.respond_to?(:keys) && obj.respond_to?(:values)
+      Hash[obj.sort]
     else
-      obj = obj.sort{|a,b| a.to_s <=> b.to_s}
+      obj.sort{ |a,b| a.to_s <=> b.to_s }
     end
   end
 
