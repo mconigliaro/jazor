@@ -80,16 +80,17 @@ begin
     end
   end
 
-  if options[:sort] && obj.respond_to?(:sort)
-    obj = if obj.respond_to?(:keys) && obj.respond_to?(:values)
-      Hash[obj.sort]
-    else
-      obj.sort{ |a,b| a.to_s <=> b.to_s }
-    end
-  end
-
   (ARGV.length > 0 ? ARGV[0..ARGV.length] : [nil]).each do |expression|
     result = expression.nil? ? obj : obj.instance_eval(expression)
+
+    if options[:sort] && result.respond_to?(:sort)
+      result = if result.respond_to?(:keys) && result.respond_to?(:values)
+        Hash[result.sort]
+      else
+        result.sort{ |a,b| a.to_s <=> b.to_s }
+      end
+    end
+
     if options[:test]
       if result
         Jazor::LOG.info("Test passed: #{expression} => #{[Hash, Array].include?(result.class) ? result.to_json : result}")
