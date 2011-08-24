@@ -1,5 +1,9 @@
 = Change Log
 
+== 0.1.2 (2011-08-24)
+
+* Apply sort after evaluating expression
+
 == 0.1.1 (2011-08-24)
 
 * Added sort option (Dan Hopkins)
