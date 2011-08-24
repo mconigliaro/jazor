@@ -10,7 +10,7 @@ require 'json'
 module Jazor
 
   NAME         = 'jazor'
-  VERSION      = '0.1.0'
+  VERSION      = '0.1.1'
   AUTHOR       = 'Michael T. Conigliaro'
   AUTHOR_EMAIL = 'mike [at] conigliaro [dot] org'
   DESCRIPTION  = 'Jazor (JSON + razor) is a simple command line JSON parsing tool.'
