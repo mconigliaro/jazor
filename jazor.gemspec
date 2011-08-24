@@ -4,8 +4,8 @@ require 'jazor'
 Gem::Specification.new do |s|
   s.name              = Jazor::NAME
   s.version           = Jazor::VERSION
-  s.authors           = [Jazor::AUTHOR]
-  s.email             = [Jazor::AUTHOR_EMAIL]
+  s.authors           = Jazor::AUTHOR
+  s.email             = Jazor::AUTHOR_EMAIL
   s.homepage          = Jazor::URL
   s.rubyforge_project = Jazor::NAME
   s.summary           = Jazor::DESCRIPTION
@@ -13,6 +13,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency('json')
 
-  s.files = ['COPYING.txt', 'Rakefile', 'README.rdoc'] + Dir['bin/*'] + Dir['lib/*.rb'] + Dir['test/*']
+  s.files = ['CHANGELOG.rdoc', 'LICENSE', 'Rakefile', 'README.rdoc'] + Dir['bin/*'] + Dir['lib/*.rb'] + Dir['test/*']
   s.executables = ['jazor']
 end

@@ -1,0 +1,24 @@
+= Change Log
+
+== 0.1.1 (2011-08-24)
+
+* Added sort option (Dan Hopkins)
+
+== 0.1.0 (2011-08-23)
+
+* Code refactoring
+* Documentation rewrite
+* Changed test option to a switch that operates on all expressions
+
+== 0.0.4 (2011-01-25)
+
+* Print help summary on absence of input
+* Bug fixes
+
+== 0.0.3 (2011-01-25)
+
+* Bug fixes
+
+== 0.0.2 (2011-01-24)
+
+* Initial public release

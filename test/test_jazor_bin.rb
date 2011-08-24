@@ -31,17 +31,6 @@ class TestExecute < Test::Unit::TestCase
     assert JSON.parse(`#{@jazor_bin} '#{@init_string}'`).is_a?(Hash)
   end
 
-  def test_sorting
-    testing_function = Proc.new do |input_str, expected|
-      assert_equal expected, `#{@jazor_bin} -s '#{input_str}'`.gsub(/\s/,'')
-    end
-
-    testing_function.call('[2,1]', '[1,2]')
-    testing_function.call('["foo","bar",1]', '[1,"bar","foo"]')
-    testing_function.call('{"foo": 1, "bar":2}', '{"bar":2,"foo":1}')
-    testing_function.call('{"1": 1, "bar":2}', '{"1":1,"bar":2}')
-  end
-
   def test_json_from_file_with_expression
     assert eval(`#{@jazor_bin} #{@init_file} value1`).is_a?(Integer)
     assert JSON.parse(`#{@jazor_bin} #{@init_file} nested_object`).is_a?(Hash)
@@ -52,6 +41,19 @@ class TestExecute < Test::Unit::TestCase
   def test_json_from_file_with_tests
     assert `#{@jazor_bin} -t #{@init_file} 'value1==123'` =~ /passed/
     assert `#{@jazor_bin} -t #{@init_file} 'value1==1234'` =~ /failed/
+  end
+
+  def test_sorting
+    if Jazor::HAS_ORDERED_HASH
+      {
+        '[3, 2, 1]'          => [1, 2, 3],
+        '["foo", "bar", 1]'  => [1, 'bar', 'foo'],
+        '{"foo":1, "bar":2}' => {'bar' => 2, 'foo' => 1},
+        '{"1":1, "bar":2}'   => {'1' => 1, 'bar' => 2}
+      }.each do |k,v|
+        assert JSON.parse(`#{@jazor_bin} -s '#{k}'`) == v
+      end
+    end
   end
 
 end
