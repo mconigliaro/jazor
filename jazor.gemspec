@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.homepage          = Jazor::URL
   s.rubyforge_project = Jazor::NAME
   s.summary           = Jazor::DESCRIPTION
-  s.description       = File.read(File.expand_path(File.join(File.dirname(__FILE__), 'README.rdoc')))
+  s.description       = Jazor::DESCRIPTION
 
   s.add_dependency('json')
 
