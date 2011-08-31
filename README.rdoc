@@ -54,14 +54,17 @@ scripts.
   $ jazor '{ "foo": "abc", "bar": [1, 2, 3] }' 'bar.inject { |memo,obj| memo + obj }'
   6
 
-  $ jazor '[1, 2, 3, 4, 5]' 'select { |obj| obj.even? }'
+  $ jazor '[1, 2, 3, 4, 5]' 'select(&:even?)'
   [2, 4]
 
-  $ jazor '[1, 2, 3, 4, 5]' 'select { |obj| obj.odd? }'
+  $ jazor '[1, 2, 3, 4, 5]' 'select(&:odd?)'
   [1, 3, 5]
 
-  $ jazor '["a", "b", "c"]' self.count
-  3
+  $ jazor '["a", "b", "c", "d", "e"]' 'self[1..3]'
+  ["b", "c", "d"]
+
+  $ jazor '[1, 2, 3, 4, 5]' "'odds=%s; evens=%s' % [select(&:odd?).join(','), select(&:even?).join(',')]"
+  odds=1,3,5; evens=2,4
 
 == Authors
 
