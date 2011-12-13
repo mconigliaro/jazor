@@ -1,5 +1,6 @@
 require 'logger'
 require 'net/http'
+require 'net/https'
 require 'pp'
 require 'uri'
 
@@ -10,10 +11,10 @@ require 'json'
 module Jazor
 
   NAME         = 'jazor'
-  VERSION      = '0.1.2'
-  AUTHOR       = 'Michael T. Conigliaro'
+  VERSION      = '0.1.3'
+  AUTHOR       = 'Michael Paul Thomas Conigliaro'
   AUTHOR_EMAIL = 'mike [at] conigliaro [dot] org'
-  DESCRIPTION  = 'Jazor (JSON + razor) is a simple command line JSON parsing tool.'
+  DESCRIPTION  = 'Jazor (JSON razor) is a simple command line JSON parsing tool.'
   URL          = 'http://github.com/mconigliaro/jazor'
 
   LOG = Logger.new(STDOUT)
@@ -38,6 +39,10 @@ module Jazor
     def self.method_missing(method, uri, headers={}, data={})
       uri_parsed = URI.parse(uri)
       http = Net::HTTP.new(uri_parsed.host, port=uri_parsed.port)
+      if uri_parsed.scheme == 'https'
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      end
       request_uri = uri_parsed.query ? "#{uri_parsed.path}?#{uri_parsed.query}" : uri_parsed.path
       request = Net::HTTP.const_get(method.to_s.capitalize).new(request_uri)
       headers.each { |k,v| request.add_field(k, v) }

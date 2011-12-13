@@ -1,6 +1,6 @@
 = Jazor
 
-Jazor (JSON + razor) is a simple command line JSON parsing tool.
+Jazor (JSON razor) is a simple command line JSON parsing tool.
 
 == Installation
 
