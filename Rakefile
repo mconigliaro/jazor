@@ -1,15 +1,15 @@
-task :default => [:test]
+require 'rspec/core/rake_task'
 
-task :test do
-  Dir[File.expand_path(File.join(File.dirname(__FILE__), 'test', 'test_*'))].each do |test|
-    system "ruby -I #{File.expand_path(File.join(File.dirname(__FILE__), 'lib'))} #{test}"
-  end
-end
+RSpec::Core::RakeTask.new(:spec)
 
+task :default => :spec
+
+desc 'Build the gem'
 task :build do
   system "gem build *.gemspec"
 end
 
+desc 'Push the gem'
 task :push do
   system "gem push *.gem"
 end
