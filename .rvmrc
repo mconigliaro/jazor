@@ -1,4 +1,4 @@
-rvm use --create ruby-1.9.3@mconigliaro-jazor
+rvm use --create ruby-1.9.3@mconigliaro.jazor
 if ! command -v bundle
 then
   gem install bundler
