@@ -68,7 +68,7 @@ scripts.
 
 == Authors
 
-* Michael T. Conigliaro <mike [at] conigliaro [dot] org>
+* Michael Paul Thomas Conigliaro <mike [at] conigliaro [dot] org>
 
 == Contributers
 
