@@ -68,6 +68,12 @@ scripts.
 
 ## Change Log
 
+### 0.1.4 (2012-03-05)
+
+* Add --quirks-mode option
+* Update all dependencies
+* Refactoring
+
 ### 0.1.3 (2011-12-13)
 
 * Handle HTTPS URLs
@@ -103,7 +109,7 @@ scripts.
 
 ## Licence
 
-Copyright (C) 2011 Michael Paul Thomas Conigliaro
+Copyright (C) 2012 Michael Paul Thomas Conigliaro
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

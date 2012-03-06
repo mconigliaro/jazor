@@ -1,57 +1,61 @@
 #!/usr/bin/env ruby
 
-require 'fcntl'
-require 'optparse'
+require "fcntl"
+require "optparse"
 
-$:.push File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'jazor'
-
+$:.push File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+require "jazor"
 
 options = {
+  :quirks_mode  => false,
   :test         => false,
   :rest_data    => {},
   :rest_headers => {},
-  :rest_request => 'GET'
+  :rest_request => "GET"
 }
 
 OptionParser.new do |opts|
   opts.version = Jazor::VERSION
   opts.banner = "Usage: #{$0} [options] [source] [expression ...]\n\n"
 
-  opts.on('-d', '--data NAME=VALUE', 'Data sent with REST request') do |opt|
-    key, value = opt.split('=')
+  opts.on("-d", "--data NAME=VALUE", "Data sent with REST request") do |opt|
+    key, value = opt.split("=")
     options[:rest_data][key.strip] = value.strip
   end
 
-  opts.on('-H', '--header NAME:VALUE', 'Header sent with REST request') do |opt|
-    key, value = opt.split(':')
+  opts.on("-H", "--header NAME:VALUE", "Header sent with REST request") do |opt|
+    key, value = opt.split(":")
     options[:rest_headers][key.strip] = value.strip
   end
 
-  opts.on('-t', '--test', 'Enable expression testing') do |opt|
+  opts.on("-t", "--test", "Enable expression testing") do |opt|
     options[:test] = true
   end
 
-  opts.on('-v', '--verbose', 'Enable verbose logging') do |opt|
+  opts.on("-v", "--verbose", "Enable verbose logging") do |opt|
     Jazor::LOG.level = Logger::DEBUG
   end
 
-  opts.on('-X', '--request REQUEST', 'REST request method (default: %s)' % options[:rest_request]) do |opt|
+  opts.on("-X", "--request REQUEST", "REST request method (default: %s)" % options[:rest_request]) do |opt|
     options[:rest_request] = opt
   end
 
   if Jazor::HAS_ORDERED_HASH
-    opts.on('-s', '--sort', "Sort output") do
+    opts.on("-s", "--sort", "Sort output") do
       options[:sort] = true
     end
   end
 
-  opts.on_tail('-h', '--help', 'Show this message') do
+  opts.on("-q", "--quirks-mode", 'Enable "quirks mode" for JSON parser') do
+    options[:quirks_mode] = true
+  end
+
+  opts.on_tail("-h", "--help", "Show this message") do
     puts opts.help
     exit
   end
 
-  opts.on_tail('--version', 'Show version') do
+  opts.on_tail("--version", "Show version") do
     puts "%s %s\n%s <%s>\n%s" % [opts.program_name, opts.version, Jazor::AUTHOR, Jazor::AUTHOR_EMAIL, Jazor::URL]
     exit
   end
@@ -62,26 +66,30 @@ OptionParser.new do |opts|
   end
 end.parse!
 
+parse_options = {
+  :quirks_mode => options[:quirks_mode]
+}
+
 begin
 
   obj = if STDIN.fcntl(Fcntl::F_GETFL, 0) == 0
-    Jazor::LOG.debug('Reading JSON from STDIN')
-    Jazor::parse(STDIN.read)
+    Jazor::LOG.debug("Reading JSON from STDIN")
+    Jazor::parse(STDIN.read, parse_options)
   elsif !ARGV[0].nil?
     if ARGV[0] =~ URI::regexp
       Jazor::LOG.debug("Reading JSON from URI: #{ARGV[0]}")
-      Jazor::parse(Jazor::RestClient.send(options[:rest_request], ARGV.shift, options[:rest_headers], options[:rest_data]).body)
+      Jazor::parse(Jazor::RestClient.send(options[:rest_request], ARGV.shift, options[:rest_headers], options[:rest_data]).body, parse_options)
     elsif File.readable?(ARGV[0])
       Jazor::LOG.debug("Reading JSON from file: #{ARGV[0]}")
-      Jazor::parse(IO.read(ARGV.shift))
+      Jazor::parse(IO.read(ARGV.shift), parse_options)
     else
       Jazor::LOG.debug("Reading JSON from ARGV: #{ARGV[0]}")
-      Jazor::parse(ARGV.shift)
+      Jazor::parse(ARGV.shift, parse_options)
     end
   end
 
   (ARGV.length > 0 ? ARGV[0..ARGV.length] : [nil]).each do |expression|
-    result = expression.nil? ? obj : obj.instance_eval(expression)
+    result = Jazor::evaluate(obj, expression)
 
     if options[:sort] && result.respond_to?(:sort)
       result = if result.respond_to?(:keys) && result.respond_to?(:values)
@@ -99,13 +107,17 @@ begin
         exit(1)
       end
     else
-      puts [Hash, Array].include?(result.class) ? JSON.pretty_generate(result) : result
+      if [Hash, Array].include?(result.class)
+        puts JSON.pretty_generate(result)
+      elsif result.is_a?(String)
+        puts "\"#{result}\""
+      else
+        puts result
+      end
     end
   end
 
 rescue StandardError => e
-  puts e
-  puts e.backtrace
-  Jazor::LOG.error(e.message)
+  Jazor::LOG.error(e)
   exit(1)
 end
