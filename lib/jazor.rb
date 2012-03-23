@@ -6,12 +6,13 @@ require "logger"
 require "net/http"
 require "net/https"
 require "pp"
+require "term/ansicolor"
 require "uri"
 
 module Jazor
 
   NAME         = "jazor"
-  VERSION      = "0.1.4"
+  VERSION      = "0.1.5"
   AUTHOR       = "Michael Paul Thomas Conigliaro"
   AUTHOR_EMAIL = "mike [at] conigliaro [dot] org"
   DESCRIPTION  = "Jazor (JSON razor) is a simple command line JSON parsing tool."
@@ -32,6 +33,15 @@ module Jazor
     result = expression.nil? ? obj : obj.instance_eval(expression)
     Jazor::LOG.debug("Expression (#{expression}) returns a #{result.class}")
     result
+  end
+
+  def self.colorize(input)
+    input = input.gsub(/"(.*)":/, "\\1:".bold) # Key
+    input = input.gsub(/"(#{URI::regexp})"/i, "\\1".magenta.underline) # URL
+    input = input.gsub(/"(.*)"/, "\"\\1\"".green) # String
+    input = input.gsub(/(\s+[-+]?\d*\.?\d+)(,?)$/, "\\1".cyan + "\\2") # Numeric
+    input = input.gsub(/(\s+(true|false))(,?)$/, "\\1".blue + "\\3") # Boolean
+    input = input.gsub(/(\s+null)(,?)$/, "\\1".red + "\\2") # Null
   end
 
   class RestClient
@@ -66,4 +76,8 @@ class Hash
       nil
     end
   end
+end
+
+class String
+  include Term::ANSIColor
 end

@@ -8,6 +8,7 @@ require "jazor"
 
 options = {
   :quirks_mode  => false,
+  :colorize     => false,
   :test         => false,
   :rest_data    => {},
   :rest_headers => {},
@@ -26,6 +27,10 @@ OptionParser.new do |opts|
   opts.on("-H", "--header NAME:VALUE", "Header sent with REST request") do |opt|
     key, value = opt.split(":")
     options[:rest_headers][key.strip] = value.strip
+  end
+
+  opts.on("-c", "--colorize", "Colorize output") do |opt|
+    options[:colorize] = true
   end
 
   opts.on("-t", "--test", "Enable expression testing") do |opt|
@@ -76,7 +81,7 @@ begin
     Jazor::LOG.debug("Reading JSON from STDIN")
     Jazor::parse(STDIN.read, parse_options)
   elsif !ARGV[0].nil?
-    if ARGV[0] =~ URI::regexp
+    if ARGV[0] =~ /^#{URI::regexp}$/
       Jazor::LOG.debug("Reading JSON from URI: #{ARGV[0]}")
       Jazor::parse(Jazor::RestClient.send(options[:rest_request], ARGV.shift, options[:rest_headers], options[:rest_data]).body, parse_options)
     elsif File.readable?(ARGV[0])
@@ -108,7 +113,7 @@ begin
       end
     else
       if [Hash, Array].include?(result.class)
-        puts JSON.pretty_generate(result)
+        puts options[:colorize] ? Jazor::colorize(JSON.pretty_generate(result)) : JSON.pretty_generate(result)
       elsif result.is_a?(String)
         puts "\"#{result}\""
       else

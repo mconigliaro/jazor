@@ -1,8 +1,10 @@
 {
   "test_String":     "123",
+  "test_String_URL": "http://example.com",
   "test_Integer":    123,
   "test_Float":      0.123,
   "test_TrueClass":  true,
   "test_FalseClass": false,
+  "test_Nilclass":   null,
   "test_Array":      [1, 2, 3]
 }

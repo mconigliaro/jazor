@@ -68,6 +68,11 @@ scripts.
 
 ## Change Log
 
+### 0.1.5 (2012-03-23)
+
+* Add --colorize option
+* Bug fixes
+
 ### 0.1.4 (2012-03-05)
 
 * Add --quirks-mode option

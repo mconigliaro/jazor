@@ -5,7 +5,7 @@ describe "Jazor lib" do
     @test_hash = JSON.parse(@test_file)
   end
 
-  %w{String Integer Float TrueClass FalseClass Array}.each do |t|
+  %w{String Integer Float TrueClass FalseClass NilClass Array}.each do |t|
     it "parses #{t} values in the root object" do
       obj = Jazor::parse(@test_file)["test_#{t}"]
       obj.should be_a Kernel.const_get(t)
