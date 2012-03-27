@@ -12,7 +12,7 @@ require "uri"
 module Jazor
 
   NAME         = "jazor"
-  VERSION      = "0.1.5"
+  VERSION      = "0.1.6"
   AUTHOR       = "Michael Paul Thomas Conigliaro"
   AUTHOR_EMAIL = "mike [at] conigliaro [dot] org"
   DESCRIPTION  = "Jazor (JSON razor) is a simple command line JSON parsing tool."

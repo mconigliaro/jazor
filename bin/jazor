@@ -114,8 +114,6 @@ begin
     else
       if [Hash, Array].include?(result.class)
         puts options[:colorize] ? Jazor::colorize(JSON.pretty_generate(result)) : JSON.pretty_generate(result)
-      elsif result.is_a?(String)
-        puts "\"#{result}\""
       else
         puts result
       end

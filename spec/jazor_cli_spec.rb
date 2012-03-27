@@ -40,7 +40,8 @@ describe "Jazor command" do
 
   it "parses JSON from a file with an expression" do
     JSON.parse(`#{@jazor_bin} #{@test_file} test_Array`).should == @test_hash["test_Array"]
-    %w{String Integer Float TrueClass FalseClass}.each do |t|
+    eval(`#{@jazor_bin} #{@test_file} test_String`).to_s.should == @test_hash["test_String"]
+    %w{Integer Float TrueClass FalseClass}.each do |t|
       eval(`#{@jazor_bin} #{@test_file} test_#{t}`).should == @test_hash["test_#{t}"]
     end
     eval(`#{@jazor_bin} #{@test_file} dontexist`).should be_nil
