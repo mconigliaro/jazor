@@ -68,7 +68,7 @@ scripts.
 
 ## Change Log
 
-### 0.1.7
+### 0.1.7 (2012-07-26)
 
 * Convert tests from RSpec to MiniTest
 
