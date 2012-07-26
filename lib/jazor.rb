@@ -9,14 +9,9 @@ require "pp"
 require "term/ansicolor"
 require "uri"
 
-module Jazor
+require "jazor/app_info"
 
-  NAME         = "jazor"
-  VERSION      = "0.1.6"
-  AUTHOR       = "Michael Paul Thomas Conigliaro"
-  AUTHOR_EMAIL = "mike [at] conigliaro [dot] org"
-  DESCRIPTION  = "Jazor (JSON razor) is a simple command line JSON parsing tool."
-  URL          = "http://github.com/mconigliaro/jazor"
+module Jazor
 
   LOG = Logger.new(STDOUT)
   LOG.level = Logger::INFO

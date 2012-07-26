@@ -68,6 +68,10 @@ scripts.
 
 ## Change Log
 
+### 0.1.7
+
+* Convert tests from RSpec to MiniTest
+
 ### 0.1.6 (2012-03-27)
 
 * Add term-ansicolor to dependencies in gemspec
