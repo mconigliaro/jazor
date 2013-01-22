@@ -1,6 +1,6 @@
 module Jazor
   NAME         = "jazor"
-  VERSION      = "0.1.7"
+  VERSION      = "0.1.8"
   AUTHOR       = "Michael Paul Thomas Conigliaro"
   AUTHOR_EMAIL = "mike [at] conigliaro [dot] org"
   DESCRIPTION  = "Jazor (JSON razor) is a simple command line JSON parsing tool."

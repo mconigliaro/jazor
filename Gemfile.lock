@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jazor (0.1.7)
+    jazor (0.1.8)
       json
       term-ansicolor
 
