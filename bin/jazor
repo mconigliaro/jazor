@@ -95,12 +95,13 @@ begin
 
   (ARGV.length > 0 ? ARGV[0..ARGV.length] : [nil]).each do |expression|
     result = Jazor::evaluate(obj, expression)
+    Jazor::LOG.debug("Expression (#{expression}) returns a #{result.class}")
 
     if options[:sort] && result.respond_to?(:sort)
       result = if result.respond_to?(:keys) && result.respond_to?(:values)
         Hash[result.sort]
       else
-        result.sort{ |a,b| a.to_s <=> b.to_s }
+        result.sort { |a,b| a.to_s <=> b.to_s }
       end
     end
 

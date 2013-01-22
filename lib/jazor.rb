@@ -25,9 +25,7 @@ module Jazor
   end
 
   def self.evaluate(obj, expression)
-    result = expression.nil? ? obj : obj.instance_eval(expression)
-    Jazor::LOG.debug("Expression (#{expression}) returns a #{result.class}")
-    result
+    expression.nil? ? obj : obj.instance_eval(expression)
   end
 
   def self.colorize(input)
